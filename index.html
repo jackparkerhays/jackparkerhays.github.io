@@ -89,53 +89,56 @@
         statusButton.textContent = 'get status';
     }
         async function onOffButtonFunction() {
-            if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
-                let relayCommand;
-    
-                // Prepare the data to send
-                if (relayStatus == 'on') {
-                    relayCommand = 'off';
-                } else if (relayStatus == 'off') {
-                    relayCommand = 'on';
-                }
-                const data = new URLSearchParams();
-                const accessToken = 'c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e';
-                data.append('access_token', accessToken);
-                data.append('arg', relayCommand);
-                try {
-                    // Send the POST request
-                    onOffButton.textContent = 'waiting on response';
-                    disableButton(onOffButton);
-                    console.log("About to send");
-                    const response = await fetch('https://api.particle.io/v1/devices/e00fce6804a106495f86a42b/toggle', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: data
-                    });
-    
-                    if (!response.ok) {
-                        const errorDetails = await response.text(); // Get detailed error message from the response body
-                        throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
-                    } else {
-                        const result = await response.json();
-                        console.log('Success:', result);
-                        messageBox.textContent = 'device is online';
-                        relayStatus = 'unknown';
-                        relayStatusBox.textContent = 'refresh relay status';
-                        onOffButton.innerText = 'waiting for relay status';
+            const confirmed = confirm("Are you sure you want to flip the relay?");
+            if (confirmed) {
+                if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
+                    let relayCommand;
+        
+                    // Prepare the data to send
+                    if (relayStatus == 'on') {
+                        relayCommand = 'off';
+                    } else if (relayStatus == 'off') {
+                        relayCommand = 'on';
                     }
-                    disableButton(onOffButton);
-                    onOffButton.textContent = 'waiting for status';
-                } catch (error) {
-                    console.log(error);
-                    console.error('Error:', error);
-                    if (error.error === 'Timed out') {
-                        messageBox.textContent = 'cannot connect to device';
+                    const data = new URLSearchParams();
+                    const accessToken = 'c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e';
+                    data.append('access_token', accessToken);
+                    data.append('arg', relayCommand);
+                    try {
+                        // Send the POST request
+                        onOffButton.textContent = 'waiting on response';
+                        disableButton(onOffButton);
+                        console.log("About to send");
+                        const response = await fetch('https://api.particle.io/v1/devices/e00fce6804a106495f86a42b/toggle', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: data
+                        });
+        
+                        if (!response.ok) {
+                            const errorDetails = await response.text(); // Get detailed error message from the response body
+                            throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
+                        } else {
+                            const result = await response.json();
+                            console.log('Success:', result);
+                            messageBox.textContent = 'device is online';
+                            relayStatus = 'unknown';
+                            relayStatusBox.textContent = 'refresh relay status';
+                            onOffButton.innerText = 'waiting for relay status';
+                        }
+                        disableButton(onOffButton);
+                        onOffButton.textContent = 'waiting for status';
+                    } catch (error) {
+                        console.log(error);
+                        console.error('Error:', error);
+                        if (error.error === 'Timed out') {
+                            messageBox.textContent = 'cannot connect to device';
+                        }
+                        disableButton(onOffButton);
+                        onOffButton.textContent = 'waiting for status';
                     }
-                    disableButton(onOffButton);
-                    onOffButton.textContent = 'waiting for status';
                 }
             }
         }
