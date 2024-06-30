@@ -62,13 +62,15 @@
                     onOffButton.textContent = 'waiting for status';
                 }
             }
-        } catch (error) {
-            console.log(error);
-            relayStatusBox.textContent = 'relay status unknown';
-            onOffButton.textContent = 'waiting for status';
+} catch (error) {
             console.error('Error:', error);
+            if (relayStatusBox) {
+                relayStatusBox.textContent = 'relay status unknown';
+            }
+            if (onOffButton) {
+                onOffButton.textContent = 'waiting for status';
+            }
             if (error.name === 'AbortError') {
-                relayStatus = 'unknown'
                 connectionStatus = 'disconnected';
                 messageBox.textContent = 'cannot connect to device';
             }
