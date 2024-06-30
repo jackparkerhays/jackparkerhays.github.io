@@ -13,18 +13,19 @@
 </head>
 <body>
     <button id="onOffButton" onclick="onOffButton()">waiting for status</button>
-    <button id="statusButton" onclick="statusButton()">get status</button>
+    <button id="statusButton" onclick="statusButton()">waiting for status</button>
     <div id="messageBox" class="indicator">waiting for connection status</div>
-    <div id="relayStatus" class="indicator">waiting for relay status</div>
+    <div id="relayStatusBox" class="indicator">waiting for relay status</div>
 
     <script>
     let connectionStatus = 'disconnected';
+    let relayStatus = 'relay status unknown';
     
     async function statusButton() {
-        const button = document.getElementById('statusButton');
+        const statusButton = document.getElementById('statusButton');
+        const onOffButton = document.getElementById('onOffButton');
         const messageBox = document.getElementById('messageBox');
-        const relayStatus = document.getElementById('relayStatus');
-        button.innerText = 'press for status';
+        const relayStatusBox = document.getElementById('relayStatus');
 
         // Prepare the data to send
         try {
@@ -40,40 +41,57 @@
             if (!response.ok) {
                 const errorDetails = await response.text(); // Get detailed error message from the response body
                 throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
-            }
-
-            const result = await response.json();
-            console.log('Success:', result);
-            messageBox.textContent = 'Device is online';
-            connectionStatus = 'connected';
-            if (result.result == 1) {
-                relayStatus.textContent = 'relay is on';
-            } else if (result.result == 0) {
-                relayStatus.textContent = 'relay is off';
+                connectionStatus = 'relay status unknown';
+                relayStatusBox.textContent = 'connection issue';
             } else {
-                relayStatus.textContent = 'something is wrong';
+                const result = await response.json();
+                console.log('Success:', result);
+                messageBox.textContent = 'connected to device';
+                connectionStatus = 'connected';
+                if (result.result == 1) {
+                    relayStatus = 'on'
+                    relayStatusBox.textContent = 'relay is on';
+                    onOffButton.textContent = 'turn off relay';
+                } else if (result.result == 0) {
+                    relayStatus = 'off'
+                    relayStatusBox.textContent = 'relay is off';
+                    onOffButton.textContent = 'turn on relay';
+                } else {
+                    relayStatus = 'unknown'
+                    relayStatusBox.textContent = 'relay status unknown';
+                    onOffButton.textContent = 'waiting for status';
+                }
             }
         } catch (error) {
             console.log(error);
+            relayStatusBox.textContent = 'relay status unknown';
+            onOffButton.textContent = 'waiting for status';
             console.error('Error:', error);
             if (error.name === 'AbortError') {
-                messageBox.textContent = 'cannot connect to device';
+                relayStatus = 'unknown'
                 connectionStatus = 'disconnected';
+                messageBox.textContent = 'cannot connect to device';
             }
         }
     }
         async function onOffButton() {
-            if (connectionStatus === 'connected') {
+            if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
                 const button = document.getElementById('onOffButton');
                 const messageBox = document.getElementById('messageBox');
-                let buttonState = 'on';
-                button.innerText === 'waiting for response';
+                let buttonCommand;
     
                 // Prepare the data to send
+                if (relayStatus == 'on' {
+                    button.innerText = 'turn off relay';
+                    buttonCommand = 'off';
+                } else if (relayStatus == 'off' {
+                    button.innerText = 'turn on relay';
+                    buttonCommand = 'on';
+                }
                 const data = new URLSearchParams();
                 const accessToken = 'c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e';
                 data.append('access_token', accessToken);
-                data.append('arg', buttonState);
+                data.append('arg', buttonCommand);
                 try {
                     // Send the POST request
                     console.log("About to send");
@@ -88,12 +106,18 @@
                     if (!response.ok) {
                         const errorDetails = await response.text(); // Get detailed error message from the response body
                         throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
+                    } else {
+                        const result = await response.json();
+                        console.log('Success:', result);
+                        messageBox.textContent = 'connected to device';
+                        if (buttonCommand = 'off' {
+                            buttonCommand = 'off';
+                            button.innerText = 'turn on relay';
+                        } else if (buttonCommand = 'on' {
+                            buttonCommand = 'on';
+                            button.innerText = 'turn off relay';
+                        }
                     }
-    
-                    const result = await response.json();
-                    console.log('Success:', result);
-                    messageBox.textContent = 'connected to device';
-                    button.innerText = buttonState;
                 } catch (error) {
                     console.log(error);
                     console.error('Error:', error);
