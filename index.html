@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toggle Button</title>
+    <title>Toggle Button with POST Request</title>
     <style>
         .indicator {
             font-size: 20px;
@@ -16,15 +16,37 @@
     <div id="indicator" class="indicator">The button is off</div>
 
     <script>
-        function toggleButton() {
+        async function toggleButton() {
             const button = document.getElementById('toggleButton');
             const indicator = document.getElementById('indicator');
-            if (button.innerText === 'Off') {
-                button.innerText = 'On';
-                indicator.innerText = 'The button is on';
-            } else {
-                button.innerText = 'Off';
-                indicator.innerText = 'The button is off';
+            let buttonState = button.innerText === 'off' ? 'on' : 'off';
+            
+            // Update the button text and indicator text
+            button.innerText = buttonState;
+            indicator.innerText = `The button is ${buttonState.toLowerCase()}`;
+
+            // Prepare the data to send
+            const data = new URLSearchParams();
+            data.append('access_token', c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e);
+            data.append('arg', buttonState);
+            try {
+                // Send the POST request
+                const response = await fetch('https://api.particle.io/v1/devices/e00fce6804a106495f86a42b/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+
+                const result = await response.json();
+                console.log('Success:', result);
+            } catch (error) {
+                console.error('Error:', error);
             }
         }
     </script>
