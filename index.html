@@ -30,7 +30,9 @@
         // Prepare the data to send
         try {
             // Send the GET request
-            console.log("About to request");
+            statusButton.textContent = 'waiting on response';
+            disableButton(statusButton);
+            
             const response = await fetch('https://api.particle.io/v1/devices/e00fce6804a106495f86a42b/sensor?access_token=c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e', {
                 method: 'GET',
                 headers: {
@@ -62,7 +64,9 @@
                     onOffButton.textContent = 'waiting for status';
                 }
             }
-} catch (error) {
+            enableButton(statusButton);
+            statusButton.textContent = 'get status';
+        } catch (error) {
             console.error('Error:', error);
             if (relayStatusBox) {
                 relayStatusBox.textContent = 'relay status unknown';
@@ -70,11 +74,13 @@
             if (onOffButton) {
                 onOffButton.textContent = 'waiting for status';
             }
-            if (error.name === 'AbortError') {
+            if (error.error === 'Timed out') {
                 connectionStatus = 'disconnected';
                 messageBox.textContent = 'cannot connect to device';
             }
         }
+        enableButton(statusButton);
+        statusButton.textContent = 'get status';
     }
         async function onOffButton() {
             if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
@@ -95,6 +101,8 @@
                 data.append('arg', relayCommand);
                 try {
                     // Send the POST request
+                    onOffButton.textContent = 'waiting on response';
+                    disableButton(statusButton);
                     console.log("About to send");
                     const response = await fetch('https://api.particle.io/v1/devices/e00fce6804a106495f86a42b/toggle', {
                         method: 'POST',
@@ -115,14 +123,29 @@
                         relayStatusBox.textContent = 'refresh relay status';
                         button.innerText = 'waiting for relay status';
                     }
+                    enableButton(statusButton);
+                    onOffButton.textContent = 'waiting for status';
                 } catch (error) {
                     console.log(error);
                     console.error('Error:', error);
-                    if (error.name === 'AbortError') {
+                    if (error.error === 'Timed out') {
                         messageBox.textContent = 'cannot connect to device';
                     }
+                    enableButton(statusButton);
+                    onOffButton.textContent = 'waiting for status';
                 }
             }
+        }
+        // Function to disable the button
+        function disableButton(button) {
+            button.classList.add('disabled-button'); // Apply the disabled style
+            button.disabled = true; // Optionally disable the button functionality
+        }
+
+        // Function to enable the button
+        function enableButton(button) {
+            button.classList.remove('disabled-button'); // Remove the disabled style
+            button.disabled = false; // Enable the button functionality
         }
     </script>
 </body>
