@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control a Relay at the Ranch</title>
+    <style>
+        .indicator {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button id="onOffButton" onclick="onOffButtonFunction()">waiting for status</button>
+    <button id="statusButton" onclick="statusButtonFunction()">get status</button>
+    <div id="messageBox" class="indicator">waiting for connection status</div>
+    <div id="relayStatusBox" class="indicator">waiting for relay status</div>
+
+    <script>
+
+    let connectionStatus = 'unknown';  // can be connected, disconnected, or unknown
+    let relayStatus = 'unknown';  // can be on, off, or unknown
+    const statusButton = document.getElementById('statusButton');
+    const onOffButton = document.getElementById('onOffButton');
+    const messageBox = document.getElementById('messageBox');
+    const relayStatusBox = document.getElementById('relayStatusBox');
+    disableButton(onOffButton);  // start onOffButton off as disabled
+    
+    async function statusButtonFunction() {
+        // Prepare the data to send
+        try {
+            // Send the GET request
+            statusButton.textContent = 'waiting on response';
+            messageBox.textContent = 'waiting on response';
+            relayStatusBox.textContent = 'waiting on response';
+            
+            disableButton(statusButton);
+            disableButton(onOffButton);
+            
+            const response = await fetch('https://api.particle.io/v1/devices/e00fce6804a106495f86a42b/sensor?access_token=c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            });
+
+            if (!response.ok) {
+                const errorDetails = await response.text(); // Get detailed error message from the response body
+                throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
+                connectionStatus = 'unknown';
+                messageBox.textContent = 'connection issue';
+                relayStatusBox.textContent = 'connection issue';
+            } else {
+                const result = await response.json();
+                console.log('Success:', result);
+                messageBox.textContent = 'device is online';
+                connectionStatus = 'connected';
+                if (result.result == 1) {
+                    relayStatus = 'on'
+                    relayStatusBox.textContent = 'relay is on';
+                    onOffButton.textContent = 'turn off relay';
+                    enableButton(onOffButton);
+                } else if (result.result == 0) {
+                    relayStatus = 'off'
+                    relayStatusBox.textContent = 'relay is off';
+                    onOffButton.textContent = 'turn on relay';
+                    enableButton(onOffButton);
+                } else {
+                    relayStatus = 'unknown'
+                    relayStatusBox.textContent = 'relay status unknown';
+                    onOffButton.textContent = 'waiting for status';
+                    disableButton(onOffButton);
+                }
+            }
+            enableButton(statusButton);
+            statusButton.textContent = 'get status';
+        } catch (error) {
+            console.error('Error:', error);
+            connectionStatus = 'disconnected';
+            relayStatusBox.textContent = 'connection issue';
+            messageBox.textContent = 'connection issue';
+            disableButton(onOffButton);
+        }
+        enableButton(statusButton);
+        statusButton.textContent = 'get status';
+    }
+        async function onOffButtonFunction() {
+            const confirmed = confirm("Are you sure you want to flip the relay?");
+            if (confirmed) {
+                if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
+                    let relayCommand;
+        
+                    // Prepare the data to send
+                    if (relayStatus == 'on') {
+                        relayCommand = 'off';
+                    } else if (relayStatus == 'off') {
+                        relayCommand = 'on';
+                    }
+                    const data = new URLSearchParams();
+                    const accessToken = 'c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e';
+                    data.append('access_token', accessToken);
+                    data.append('arg', relayCommand);
+                    try {
+                        // Send the POST request
+                        onOffButton.textContent = 'waiting on response';
+                        disableButton(onOffButton);
+                        console.log("About to send");
+                        const response = await fetch('https://api.particle.io/v1/devices/e00fce6804a106495f86a42b/toggle', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: data
+                        });
+        
+                        if (!response.ok) {
+                            const errorDetails = await response.text(); // Get detailed error message from the response body
+                            throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
+                            connectionStatus = 'disconnected';
+                            relayStatusBox.textContent = 'connection issue';
+                            messageBox.textContent = 'connection issue';
+                        } else {
+                            const result = await response.json();
+                            console.log('Success:', result);
+                            messageBox.textContent = 'device is online';
+                            relayStatus = 'unknown';
+                            relayStatusBox.textContent = 'refresh relay status';
+                            onOffButton.innerText = 'waiting for relay status';
+                        }
+                        disableButton(onOffButton);
+                        onOffButton.textContent = 'waiting for status';
+                    } catch (error) {
+                        console.log(error);
+                        console.error('Error:', error);
+                        disableButton(onOffButton);
+                        onOffButton.textContent = 'waiting for status';
+                        connectionStatus = 'disconnected';
+                        relayStatusBox.textContent = 'connection issue';
+                        messageBox.textContent = 'connection issue';
+                        
+                    }
+                }
+            }
+        }
+        // Function to disable the button
+        function disableButton(button) {
+            button.classList.add('disabled-button'); // Apply the disabled style
+            button.disabled = true; // Optionally disable the button functionality
+        }
+
+        // Function to enable the button
+        function enableButton(button) {
+            button.classList.remove('disabled-button'); // Remove the disabled style
+            button.disabled = false; // Enable the button functionality
+        }
+    </script>
+</body>
+</html>
