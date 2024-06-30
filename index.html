@@ -12,8 +12,8 @@
     </style>
 </head>
 <body>
-    <button id="onOffButton" onclick="onOffButton()">waiting for status</button>
-    <button id="statusButton" onclick="statusButton()">get status</button>
+    <button id="onOffButton" onclick="onOffButtonFunction()">waiting for status</button>
+    <button id="statusButton" onclick="statusButtonFunction()">get status</button>
     <div id="messageBox" class="indicator">waiting for connection status</div>
     <div id="relayStatusBox" class="indicator">waiting for relay status</div>
 
@@ -27,7 +27,7 @@
     const relayStatusBox = document.getElementById('relayStatusBox');
     disableButton(onOffButton);  // start onOffButton off as disabled
     
-    async function statusButton() {
+    async function statusButtonFunction() {
         // Prepare the data to send
         try {
             // Send the GET request
@@ -87,7 +87,7 @@
         enableButton(statusButton);
         statusButton.textContent = 'get status';
     }
-        async function onOffButton() {
+        async function onOffButtonFunction() {
             if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
                 let relayCommand;
     
