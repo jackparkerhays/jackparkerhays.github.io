@@ -80,7 +80,7 @@
             relayStatusBox.textContent = 'relay status unknown';
             onOffButton.textContent = 'waiting for status';
             disableButton(onOffButton);
-            if (error.error === 'Timed out') {
+            if (error.message.includes('Timed out')) {
                 connectionStatus = 'disconnected';
                 messageBox.textContent = 'cannot connect to device';
                 relayStatusBox.textContent = 'cannot connect to device';
@@ -134,7 +134,7 @@
                     } catch (error) {
                         console.log(error);
                         console.error('Error:', error);
-                        if (error.error === 'Timed out') {
+                        if (error.message.includes('Timed out')) {
                             messageBox.textContent = 'cannot connect to device';
                         }
                         disableButton(onOffButton);
