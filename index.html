@@ -110,10 +110,10 @@
                         const result = await response.json();
                         console.log('Success:', result);
                         messageBox.textContent = 'connected to device';
-                        if (relayCommand = 'off') {
+                        if (relayCommand == 'off') {
                             relayCommand = 'off';
                             button.innerText = 'turn on relay';
-                        } else if (relayCommand = 'on') {
+                        } else if (relayCommand == 'on') {
                             relayCommand = 'on';
                             button.innerText = 'turn off relay';
                         }
