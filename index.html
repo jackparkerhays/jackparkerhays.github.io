@@ -18,14 +18,14 @@
     <div id="relayStatusBox" class="indicator">waiting for relay status</div>
 
     <script>
-    let connectionStatus = 'disconnected';
-    let relayStatus = 'relay status unknown';
+    let connectionStatus = 'unknown';  // can be connected, disconnected, or unknown
+    let relayStatus = 'unknown';  // can be on, off, or unknown
     
     async function statusButton() {
         const statusButton = document.getElementById('statusButton');
         const onOffButton = document.getElementById('onOffButton');
         const messageBox = document.getElementById('messageBox');
-        const relayStatusBox = document.getElementById('relayStatus');
+        const relayStatusBox = document.getElementById('relayStatusBox');
 
         // Prepare the data to send
         try {
@@ -41,12 +41,12 @@
             if (!response.ok) {
                 const errorDetails = await response.text(); // Get detailed error message from the response body
                 throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
-                connectionStatus = 'relay status unknown';
+                connectionStatus = 'unknown';
                 relayStatusBox.textContent = 'connection issue';
             } else {
                 const result = await response.json();
                 console.log('Success:', result);
-                messageBox.textContent = 'connected to device';
+                messageBox.textContent = 'device is online';
                 connectionStatus = 'connected';
                 if (result.result == 1) {
                     relayStatus = 'on'
@@ -109,7 +109,7 @@
                     } else {
                         const result = await response.json();
                         console.log('Success:', result);
-                        messageBox.textContent = 'connected to device';
+                        messageBox.textContent = 'device is online';
                         if (relayCommand == 'off') {
                             relayCommand = 'off';
                             button.innerText = 'turn on relay';
