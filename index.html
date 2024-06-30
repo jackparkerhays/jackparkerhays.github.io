@@ -18,16 +18,15 @@
     <div id="relayStatusBox" class="indicator">waiting for relay status</div>
 
     <script>
-    disableButton(onOffButton);  // start onOffButton off as disabled
     let connectionStatus = 'unknown';  // can be connected, disconnected, or unknown
     let relayStatus = 'unknown';  // can be on, off, or unknown
+    const statusButton = document.getElementById('statusButton');
+    const onOffButton = document.getElementById('onOffButton');
+    const messageBox = document.getElementById('messageBox');
+    const relayStatusBox = document.getElementById('relayStatusBox');
+    disableButton(onOffButton);  // start onOffButton off as disabled
     
     async function statusButton() {
-        const statusButton = document.getElementById('statusButton');
-        const onOffButton = document.getElementById('onOffButton');
-        const messageBox = document.getElementById('messageBox');
-        const relayStatusBox = document.getElementById('relayStatusBox');
-
         // Prepare the data to send
         try {
             // Send the GET request
@@ -89,9 +88,6 @@
     }
         async function onOffButton() {
             if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
-                const button = document.getElementById('onOffButton');
-                const messageBox = document.getElementById('messageBox');
-                const relayStatusBox = document.getElementById('relayStatusBox');
                 let relayCommand;
     
                 // Prepare the data to send
@@ -126,7 +122,7 @@
                         messageBox.textContent = 'device is online';
                         relayStatus = 'unknown';
                         relayStatusBox.textContent = 'refresh relay status';
-                        button.innerText = 'waiting for relay status';
+                        onOffButton.innerText = 'waiting for relay status';
                     }
                     disableButton(onOffButton);
                     onOffButton.textContent = 'waiting for status';
