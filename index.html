@@ -84,11 +84,11 @@
             console.log('Success:', result);
             messageBox.textContent = 'Device is online';
             if (result.result == 1) {
-                relayStatus.textContent = 'relay is on'
+                relayStatus.textContent = 'relay is on';
             } else if (result.result == 0) {
-                relayStatus.textContent = 'relay is off'
+                relayStatus.textContent = 'relay is off';
             } else {
-                relayStatus.textContent = 'something is wrong'
+                relayStatus.textContent = 'something is wrong';
             }
         } catch (error) {
             console.log(error);
