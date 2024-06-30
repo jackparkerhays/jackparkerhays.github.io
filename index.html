@@ -32,6 +32,9 @@
         try {
             // Send the GET request
             statusButton.textContent = 'waiting on response';
+            messageBox.textContent = 'waiting on response';
+            relayStatusBox.textContent = 'waiting on response';
+            
             disableButton(statusButton);
             disableButton(onOffButton);
             
@@ -46,6 +49,7 @@
                 const errorDetails = await response.text(); // Get detailed error message from the response body
                 throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
                 connectionStatus = 'unknown';
+                messageBox.textContent = 'connection issue';
                 relayStatusBox.textContent = 'connection issue';
             } else {
                 const result = await response.json();
@@ -73,16 +77,13 @@
             statusButton.textContent = 'get status';
         } catch (error) {
             console.error('Error:', error);
-            if (relayStatusBox) {
-                relayStatusBox.textContent = 'relay status unknown';
-            }
-            if (onOffButton) {
-                onOffButton.textContent = 'waiting for status';
-                disableButton(onOffButton);
-            }
+            relayStatusBox.textContent = 'relay status unknown';
+            onOffButton.textContent = 'waiting for status';
+            disableButton(onOffButton);
             if (error.error === 'Timed out') {
                 connectionStatus = 'disconnected';
                 messageBox.textContent = 'cannot connect to device';
+                relayStatusBox.textContent = 'cannot connect to device';
             }
         }
         enableButton(statusButton);
