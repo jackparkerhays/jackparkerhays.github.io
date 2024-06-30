@@ -18,13 +18,15 @@
     <div id="relayStatusBox" class="indicator">waiting for relay status</div>
 
     <script>
-    let connectionStatus = 'unknown';  // can be connected, disconnected, or unknown
-    let relayStatus = 'unknown';  // can be on, off, or unknown
-    const statusButton = document.getElementById('statusButton');
-    const onOffButton = document.getElementById('onOffButton');
-    const messageBox = document.getElementById('messageBox');
-    const relayStatusBox = document.getElementById('relayStatusBox');
-    disableButton(onOffButton);  // start onOffButton off as disabled
+    document.addEventListener('DOMContentLoaded', function() {
+        let connectionStatus = 'unknown';  // can be connected, disconnected, or unknown
+        let relayStatus = 'unknown';  // can be on, off, or unknown
+        const statusButton = document.getElementById('statusButton');
+        const onOffButton = document.getElementById('onOffButton');
+        const messageBox = document.getElementById('messageBox');
+        const relayStatusBox = document.getElementById('relayStatusBox');
+        disableButton(onOffButton);  // start onOffButton off as disabled
+    }
     
     async function statusButton() {
         // Prepare the data to send
