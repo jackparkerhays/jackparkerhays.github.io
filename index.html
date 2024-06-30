@@ -111,15 +111,9 @@
                         const result = await response.json();
                         console.log('Success:', result);
                         messageBox.textContent = 'device is online';
+                        relayStatus = 'unknown';
                         relayStatusBox.textContent = 'refresh relay status';
-                        
-                        if (relayCommand == 'off') {
-                            relayStatus = 'unknown';
-                            button.innerText = 'waiting for relay status';
-                        } else if (relayCommand == 'on') {
-                            relayStatus = 'unknown';
-                            button.innerText = 'waiting for relay status';
-                        }
+                        button.innerText = 'waiting for relay status';
                     }
                 } catch (error) {
                     console.log(error);
