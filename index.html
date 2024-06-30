@@ -12,13 +12,13 @@
     </style>
 </head>
 <body>
-    <button id="onOffButton" onclick="onOffButton()">waiting for status</button>
+    <button id="onOffButtonElement" onclick="onOffButton()">waiting for status</button>
     <button id="statusButton" onclick="statusButton()">get status</button>
     <div id="indicator" class="indicator">waiting for status</div>
 
     <script>
         async function onOffButton() {
-            const button = document.getElementById('onOffButton');
+            const button = document.getElementById('onOffButtonElement');
             const indicator = document.getElementById('indicator');
             let buttonState = 'on';
             button.innerText === 'waiting for response';
