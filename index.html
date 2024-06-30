@@ -18,9 +18,6 @@
     <script>
         async function toggleButton() {
             const button = document.getElementById('toggleButton');
-            button.addEventListener('click', toggleButton);
-            button.addEventListener('touchstart', toggleButton); // Add touchstart event
-            
             const indicator = document.getElementById('indicator');
             let buttonState = button.innerText === 'off' ? 'on' : 'off';
             
@@ -56,6 +53,10 @@
                 console.error('Error:', error);
             }
         }
+        // Attach event listener after function definition
+        const button = document.getElementById('toggleButton');
+        button.addEventListener('click', toggleButton);
+        button.addEventListener('touchstart', toggleButton); // Add touchstart event
     </script>
 </body>
 </html>
