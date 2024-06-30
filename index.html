@@ -16,8 +16,7 @@
     <div id="indicator" class="indicator">The button is off</div>
 
     <script>
-        async function toggleButton(event) {
-            event.preventDefault(); // Prevent default action for touch events
+        async function toggleButton() {
             const button = document.getElementById('toggleButton');
             const indicator = document.getElementById('indicator');
             let buttonState = button.innerText === 'off' ? 'on' : 'off';
@@ -54,13 +53,6 @@
                 console.error('Error:', error);
             }
         }
-    </script>
-
-    <script>
-        // Attach event listener after function definition
-        const button = document.getElementById('toggleButton');
-        button.addEventListener('click', toggleButton);
-        button.addEventListener('touchstart', toggleButton); // Add touchstart event
     </script>
 </body>
 </html>
