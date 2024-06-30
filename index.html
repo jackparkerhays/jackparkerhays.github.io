@@ -12,14 +12,15 @@
     </style>
 </head>
 <body>
-    <button id="onOffButton" onclick="onOffButton()">waiting for status</button>
-    <button id="statusButton" onclick="statusButton()">get status</button>
-    <div id="indicator" class="indicator">waiting for status</div>
+    <button id="onOffButton" onclick="onOffButton()">waiting for connection status</button>
+    <button id="statusButton" onclick="statusButton()">get connection status</button>
+    <div id="messageBox" class="indicator">waiting for connection status</div>
+    <div id="relayStatus" class="indicator">waiting for relay status</div>
 
     <script>
         async function onOffButton() {
             const button = document.getElementById('onOffButton');
-            const indicator = document.getElementById('indicator');
+            const messageBox = document.getElementById('messageBox');
             let buttonState = 'on';
             button.innerText === 'waiting for response';
 
@@ -46,19 +47,21 @@
 
                 const result = await response.json();
                 console.log('Success:', result);
+                messageBox.textContent = 'connected to device';
                 button.innerText = buttonState;
             } catch (error) {
                 console.log(error);
                 console.error('Error:', error);
                 if (error.name === 'AbortError') {
-                    indicator.textContent = 'cannot connect to device';
+                    messageBox.textContent = 'cannot connect to device';
                 }
             }
         }
 
     async function statusButton() {
         const button = document.getElementById('statusButton');
-        const indicator = document.getElementById('indicator');
+        const messageBox = document.getElementById('messageBox');
+        const relayStatus = document.getElementById('relayStatus');
         let buttonState = button.innerText === 'press for status';
 
         // Prepare the data to send
@@ -79,12 +82,19 @@
 
             const result = await response.json();
             console.log('Success:', result);
-            indicator.textContent = 'Device is online';
+            messageBox.textContent = 'Device is online';
+            if result.result == 1{
+                relayStatus.textContent = 'relay is on'
+            } else if result.result == 0{
+                relayStatus.textContent = 'relay is off'
+            } else{
+                relayStatus.textContent = 'something is wrong'
+            }
         } catch (error) {
             console.log(error);
             console.error('Error:', error);
             if (error.name === 'AbortError') {
-                indicator.textContent = 'cannot connect to device';
+                messageBox.textContent = 'cannot connect to device';
             }
         }
     }
