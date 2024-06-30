@@ -18,17 +18,17 @@
 
     <script>
         async function onOffButton() {
-            const onOffButton = document.getElementById('onOffButton');
-            let onOffButtonState = onOffButton.innerText === 'off' ? 'on' : 'off';
+            const button = document.getElementById('onOffButton');
+            let buttonState = button.innerText === 'off' ? 'on' : 'off';
             
             // Update the button text and indicator text
-            onOffButton.innerText = onOffButtonState;
+            button.innerText = buttonState;
 
             // Prepare the data to send
             const data = new URLSearchParams();
             const accessToken = 'c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e';
             data.append('access_token', accessToken);
-            data.append('arg', onOffButtonState);
+            data.append('arg', buttonState);
             try {
                 // Send the POST request
                 console.log("About to send");
@@ -50,15 +50,16 @@
             } catch (error) {
                 console.log(error);
                 console.error('Error:', error);
+                if 
             }
         }
     </script>
 
     <script>
     async function statusButton() {
-        const statusButton = document.getElementById('statusButton');
+        const button = document.getElementById('statusButton');
         const statusIndicator = document.getElementById('statusIndicator');
-        let statusButtonState = statusButton.innerText === 'press for status';
+        let buttonState = button.innerText === 'press for status';
 
         // Prepare the data to send
         try {
