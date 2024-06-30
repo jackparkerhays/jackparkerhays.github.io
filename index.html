@@ -42,8 +42,8 @@
                 });
 
                 if (!response.ok) {
-                    console.log("response ok");
-                    throw new Error('Network response was not ok ' + response.statusText);
+                    const errorDetails = await response.text(); // Get detailed error message from the response body
+                    throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
                 }
 
                 const result = await response.json();
