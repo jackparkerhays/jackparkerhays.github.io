@@ -78,20 +78,20 @@
             if (connectionStatus === 'connected' && relayStatus !== 'unknown') {
                 const button = document.getElementById('onOffButton');
                 const messageBox = document.getElementById('messageBox');
-                let buttonCommand;
+                let relayCommand;
     
                 // Prepare the data to send
                 if (relayStatus == 'on') {
                     button.innerText = 'turn off relay';
-                    buttonCommand = 'off';
+                    relayCommand = 'off';
                 } else if (relayStatus == 'off') {
                     button.innerText = 'turn on relay';
-                    buttonCommand = 'on';
+                    relayCommand = 'on';
                 }
                 const data = new URLSearchParams();
                 const accessToken = 'c36cee8c253a03f6e2f02b1d8eb2fb64ea8a091e';
                 data.append('access_token', accessToken);
-                data.append('arg', buttonCommand);
+                data.append('arg', relayCommand);
                 try {
                     // Send the POST request
                     console.log("About to send");
@@ -110,11 +110,11 @@
                         const result = await response.json();
                         console.log('Success:', result);
                         messageBox.textContent = 'connected to device';
-                        if (buttonCommand = 'off' {
-                            buttonCommand = 'off';
+                        if (relayCommand = 'off') {
+                            relayCommand = 'off';
                             button.innerText = 'turn on relay';
-                        } else if (buttonCommand = 'on' {
-                            buttonCommand = 'on';
+                        } else if (relayCommand = 'on') {
+                            relayCommand = 'on';
                             button.innerText = 'turn off relay';
                         }
                     }
