@@ -12,11 +12,12 @@
     </style>
 </head>
 <body>
-    <button id="toggleButton" onclick="toggleButton()">Off</button>
+    <button id="toggleButton" onclick="toggleButton()">off</button>
     <div id="indicator" class="indicator">The button is off</div>
 
     <script>
-        async function toggleButton() {
+        async function toggleButton(event) {
+            event.preventDefault(); // Prevent default action for touch events
             const button = document.getElementById('toggleButton');
             const indicator = document.getElementById('indicator');
             let buttonState = button.innerText === 'off' ? 'on' : 'off';
