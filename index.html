@@ -16,9 +16,10 @@
     <button id="statusButton" onclick="statusButton()">get status</button>
     <div id="messageBox" class="indicator">waiting for connection status</div>
     <div id="relayStatus" class="indicator">waiting for relay status</div>
-    let connectionStatus = 'disconnected';
 
     <script>
+    let connectionStatus = 'disconnected';
+    
     async function statusButton() {
         const button = document.getElementById('statusButton');
         const messageBox = document.getElementById('messageBox');
