@@ -85,10 +85,8 @@
     
                 // Prepare the data to send
                 if (relayStatus == 'on') {
-                    button.innerText = 'turn off relay';
                     relayCommand = 'off';
                 } else if (relayStatus == 'off') {
-                    button.innerText = 'turn on relay';
                     relayCommand = 'on';
                 }
                 const data = new URLSearchParams();
@@ -114,10 +112,13 @@
                         console.log('Success:', result);
                         messageBox.textContent = 'device is online';
                         relayStatusBox.textContent = 'refresh relay status';
+                        
                         if (relayCommand == 'off') {
-                            button.innerText = 'turn on relay';
+                            relayStatus = 'unknown';
+                            button.innerText = 'waiting for relay status';
                         } else if (relayCommand == 'on') {
-                            button.innerText = 'turn off relay';
+                            relayStatus = 'unknown';
+                            button.innerText = 'waiting for relay status';
                         }
                     }
                 } catch (error) {
