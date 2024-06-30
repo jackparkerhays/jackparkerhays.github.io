@@ -79,7 +79,7 @@
             console.error('Error:', error);
             connectionStatus = 'disconnected';
             relayStatusBox.textContent = 'connection issue';
-            onOffButton.textContent = 'connection issue';
+            messageBox.textContent = 'connection issue';
             disableButton(onOffButton);
         }
         enableButton(statusButton);
@@ -119,7 +119,7 @@
                             throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
                             connectionStatus = 'disconnected';
                             relayStatusBox.textContent = 'connection issue';
-                            onOffButton.textContent = 'connection issue';
+                            messageBox.textContent = 'connection issue';
                         } else {
                             const result = await response.json();
                             console.log('Success:', result);
@@ -137,7 +137,7 @@
                         onOffButton.textContent = 'waiting for status';
                         connectionStatus = 'disconnected';
                         relayStatusBox.textContent = 'connection issue';
-                        onOffButton.textContent = 'connection issue';
+                        messageBox.textContent = 'connection issue';
                         
                     }
                 }
