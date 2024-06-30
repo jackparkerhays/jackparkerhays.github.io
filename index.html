@@ -79,9 +79,13 @@
 
             const result = await response.json();
             console.log('Success:', result);
+            indicator.textContent = 'Device is online';
         } catch (error) {
             console.log(error);
             console.error('Error:', error);
+            if (error.name === 'AbortError') {
+                indicator.textContent = 'cannot connect to device';
+            }
         }
     }
     </script>
