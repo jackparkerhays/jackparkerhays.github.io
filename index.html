@@ -1,2 +1,32 @@
-# jackparkerhays.github.io
-Controlling a relay using a Particle Boron board and POST calls
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toggle Button</title>
+    <style>
+        .indicator {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggleButton" onclick="toggleButton()">Off</button>
+    <div id="indicator" class="indicator">The button is off</div>
+
+    <script>
+        function toggleButton() {
+            const button = document.getElementById('toggleButton');
+            const indicator = document.getElementById('indicator');
+            if (button.innerText === 'Off') {
+                button.innerText = 'On';
+                indicator.innerText = 'The button is on';
+            } else {
+                button.innerText = 'Off';
+                indicator.innerText = 'The button is off';
+            }
+        }
+    </script>
+</body>
+</html>
