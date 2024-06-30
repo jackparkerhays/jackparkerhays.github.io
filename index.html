@@ -50,7 +50,7 @@
                 connectionStatus = 'connected';
                 if (result.result == 1) {
                     relayStatus = 'on'
-                    relayStatusBox.textContent = 'relay is on!';
+                    relayStatusBox.textContent = 'relay is on';
                     onOffButton.textContent = 'turn off relay';
                 } else if (result.result == 0) {
                     relayStatus = 'off'
@@ -81,10 +81,10 @@
                 let buttonCommand;
     
                 // Prepare the data to send
-                if (relayStatus == 'on' {
+                if (relayStatus == 'on') {
                     button.innerText = 'turn off relay';
                     buttonCommand = 'off';
-                } else if (relayStatus == 'off' {
+                } else if (relayStatus == 'off') {
                     button.innerText = 'turn on relay';
                     buttonCommand = 'on';
                 }
