@@ -12,17 +12,16 @@
     </style>
 </head>
 <body>
-    <button id="onOffButton" onclick="onOffButton()">off</button>
+    <button id="onOffButton" onclick="onOffButton()">waiting for status</button>
     <button id="statusButton" onclick="statusButton()">get status</button>
-    <div id="statusIndicator" class="indicator">waiting for status</div>
+    <div id="indicator" class="indicator">waiting for status</div>
 
     <script>
         async function onOffButton() {
             const button = document.getElementById('onOffButton');
-            let buttonState = button.innerText === 'off' ? 'on' : 'off';
-            
-            // Update the button text and indicator text
-            button.innerText = buttonState;
+            const indicator = document.getElementById('indicator');
+            let buttonState = 'on';
+            button.innerText === 'waiting for response';
 
             // Prepare the data to send
             const data = new URLSearchParams();
@@ -47,10 +46,12 @@
 
                 const result = await response.json();
                 console.log('Success:', result);
+                button.innerText = buttonState;
             } catch (error) {
                 console.log(error);
                 console.error('Error:', error);
-                if 
+                if (error.name === 'AbortError') {
+                    indicator.textContent = 'can't connect to device';
             }
         }
     </script>
@@ -58,7 +59,7 @@
     <script>
     async function statusButton() {
         const button = document.getElementById('statusButton');
-        const statusIndicator = document.getElementById('statusIndicator');
+        const indicator = document.getElementById('indicator');
         let buttonState = button.innerText === 'press for status';
 
         // Prepare the data to send
