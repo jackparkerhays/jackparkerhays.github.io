@@ -51,6 +51,10 @@
                 connectionStatus = 'unknown';
                 messageBox.textContent = 'connection issue';
                 relayStatusBox.textContent = 'connection issue';
+
+                connectionStatus = 'disconnected';
+                messageBox.textContent = 'cannot connect to device';
+                relayStatusBox.textContent = 'cannot connect to device';
             } else {
                 const result = await response.json();
                 console.log('Success:', result);
@@ -80,11 +84,6 @@
             relayStatusBox.textContent = 'relay status unknown';
             onOffButton.textContent = 'waiting for status';
             disableButton(onOffButton);
-            if (error.message.includes('Timed out')) {
-                connectionStatus = 'disconnected';
-                messageBox.textContent = 'cannot connect to device';
-                relayStatusBox.textContent = 'cannot connect to device';
-            }
         }
         enableButton(statusButton);
         statusButton.textContent = 'get status';
@@ -121,6 +120,9 @@
                         if (!response.ok) {
                             const errorDetails = await response.text(); // Get detailed error message from the response body
                             throw new Error(`Network response was not ok: ${response.statusText}. Details: ${errorDetails}`);
+                            connectionStatus = 'disconnected';
+                            messageBox.textContent = 'cannot connect to device';
+                            relayStatusBox.textContent = 'cannot connect to device';
                         } else {
                             const result = await response.json();
                             console.log('Success:', result);
@@ -134,9 +136,6 @@
                     } catch (error) {
                         console.log(error);
                         console.error('Error:', error);
-                        if (error.message.includes('Timed out')) {
-                            messageBox.textContent = 'cannot connect to device';
-                        }
                         disableButton(onOffButton);
                         onOffButton.textContent = 'waiting for status';
                     }
