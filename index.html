@@ -13,12 +13,12 @@
 </head>
 <body>
     <button id="onOffButton" onclick="onOffButton()">waiting for status</button>
-    disableButton(onOffButton);
     <button id="statusButton" onclick="statusButton()">get status</button>
     <div id="messageBox" class="indicator">waiting for connection status</div>
     <div id="relayStatusBox" class="indicator">waiting for relay status</div>
 
     <script>
+    disableButton(onOffButton);  // start onOffButton off as disabled
     let connectionStatus = 'unknown';  // can be connected, disconnected, or unknown
     let relayStatus = 'unknown';  // can be on, off, or unknown
     
